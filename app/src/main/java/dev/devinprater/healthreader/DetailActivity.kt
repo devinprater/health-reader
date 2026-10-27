@@ -38,6 +38,7 @@ class DetailActivity : AppCompatActivity() {
         content.addView(TextView(this).apply {
             text = section.title
             textSize = 26f
+            isAccessibilityHeading = true
             setPadding(0, 0, 0, 12)
         })
         content.addView(TextView(this).apply {
@@ -91,6 +92,7 @@ class DetailActivity : AppCompatActivity() {
         content.addView(TextView(this).apply {
             text = "Records"
             textSize = 20f
+            isAccessibilityHeading = true
             setPadding(0, 8, 0, 8)
         })
         report.rows.forEach { line ->

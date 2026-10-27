@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val heading = TextView(this).apply {
             text = "Health Reader"
             textSize = 26f
+            isAccessibilityHeading = true
             setPadding(0, 0, 0, 16)
         }
         content.addView(heading)
