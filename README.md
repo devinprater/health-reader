@@ -21,8 +21,10 @@ Each screen opens with a sentence of summary, then one line per record.
 
 ## Permissions
 
-The app asks Health Connect for read access to all of the above in one screen. Nothing is written
-back, and nothing leaves the phone.
+The app declares exactly the thirty-one read permissions its sections use, and asks Health Connect
+for them in one screen. Nothing is written back, nothing leaves the phone, and the app has no
+internet permission at all, so the platform enforces that. `allowBackup` is off: the app stores
+nothing of its own, but a health-adjacent app should not be copied off the device either.
 
 Health Connect must have a rationale activity that handles
 `android.intent.action.VIEW_PERMISSION_USAGE` with the category
@@ -41,7 +43,21 @@ inventing anything.
 ```bash
 export JAVA_HOME="C:/Users/Devin Prater/AppData/Local/Java/jdk-17.0.20.1+1"
 export ANDROID_HOME="C:/Users/Devin Prater/Android/Sdk"
-gradle :app:assembleDebug --no-daemon
+gradle :app:assembleRelease --no-daemon
 ```
 
 Gradle 8.13 and AGP 8.9.2, compileSdk 36, minSdk 28.
+
+Release builds are signed from `keystore.properties` in the project root, which is not in git:
+
+```
+storeFile=/absolute/path/to/health-reader-release.jks
+storePassword=...
+keyAlias=health-reader
+keyPassword=...
+```
+
+Without that file the release build is unsigned and will not install over a signed copy. Published
+APKs are release builds signed with that key; a debug build is never published, because it is
+debuggable and carries a development identity.
+

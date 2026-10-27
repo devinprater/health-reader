@@ -3,6 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+def keystoreProperties = new Properties()
+def hasReleaseKey = keystorePropertiesFile.exists()
+if (hasReleaseKey) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace 'dev.devinprater.healthreader'
     compileSdk 36
@@ -11,13 +18,27 @@ android {
         applicationId 'dev.devinprater.healthreader'
         minSdk 28
         targetSdk 36
-        versionCode 3
-        versionName '0.3'
+        versionCode 4
+        versionName '0.4'
+    }
+
+    signingConfigs {
+        release {
+            if (hasReleaseKey) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            if (hasReleaseKey) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
